@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"></meta>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+  <title>HeXinDai CRM</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"></meta>
+  <link rel="stylesheet" href="${backendUrl}/statics/css/bootstrap.min.css"></link>
+  <link rel="stylesheet" href="${backendUrl}/statics/css/font-awesome.min.css"></link>
+  <link rel="stylesheet" href="${backendUrl}/statics/css/AdminLTE.min.css"></link>
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="${backendUrl}/statics/css/all-skins.min.css"></link>
+  <link rel="stylesheet" href="${backendUrl}/statics/css/main.css"></link>
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="${backendUrl}/statics/libs/3.7.3/html5shiv.min.js"></script>
+  <script src="${backendUrl}/statics/libs/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body class="hold-transition login-page">
+<div class="login-box" id="crmapp" v-cloak="">
+  <div class="login-logo">
+    <b>Jee4a BackEnd</b>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+      <p class="login-box-msg">登  录</p>
+      <div v-if="error" class="alert alert-danger alert-dismissible">
+        <h4 style="margin-bottom: 0px;"><i class="fa fa-exclamation-triangle"></i> {{errorMsg}}</h4>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="text" class="form-control" v-model="userName" placeholder="账号" value="admin" />
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" v-model="password" placeholder="密码" value="123456" />
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="text" class="form-control" v-model="captcha" @keyup.enter="login" placeholder="验证码" />
+        <span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <img alt="如果看不清楚，请单击图片刷新！" class="pointer" :src="src" @click="refreshCode"/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;" @click="refreshCode">点击刷新</a>
+      </div>
+      
+      
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+          </div>
+        </div>
+        <!-- /.col -->
+        <!-- /.col -->
+      </div>
+  <!--      <div class="col-xs-4">
+          <button type="button" class="btn btn-primary btn-block btn-flat" @click="login">登录</button>
+        </div> -->
+            <div class="form-inline" align="right">
+	          <button type="button" class="btn btn-primary" @click="updatePwd" >修改密码</button>
+              <button type="button" class="form-control btn btn-primary btn-block btn-flat" @click="login" >登录</button> 
+            </div>
+    <!-- /.social-auth-links -->
+  </div>
+  
+  
+	<div id="passwordLayer" style="display: none;">
+	<form class="form-horizontal">
+		<div class="form-group">
+		   	<div class="col-sm-2 control-label">账号</div>
+		   	<div class="col-sm-10">
+		      <input type="text" class="form-control" v-model="name" placeholder="账号"/>
+		    </div>
+		</div>
+		<div class="form-group">
+		   	<div class="col-sm-2 control-label">原密码</div>
+		   	<div class="col-sm-10">
+		      <input type="password" class="form-control" v-model="originalPassword" placeholder="原密码"/>
+		    </div>
+		</div>
+		<div class="form-group">
+		   	<div class="col-sm-2 control-label">新密码</div>
+		   	<div class="col-sm-10">
+		      <input type="text" class="form-control" v-model="newPassword" placeholder="新密码"/>
+		    </div>
+		</div>
+		<div class="form-group">
+		   	<div class="col-sm-2 control-label">确认新密码</div>
+		   	<div class="col-sm-10">
+		      <input type="text" class="form-control" v-model="trueNewPassword" placeholder="新密码"/>
+		    </div>
+		</div>
+	</form>
+</div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+<script src="${backendUrl}/statics/libs/jquery.min.js"></script>
+<script src="${backendUrl}/statics/libs/vue.min.js"></script>
+<script src="${backendUrl}/statics/libs/bootstrap.min.js"></script>
+<script src="${backendUrl}/statics/plugins/layer/layer.js"></script>
+<script src="${backendUrl}/statics/libs/jquery.slimscroll.min.js"></script>
+<script src="${backendUrl}/statics/libs/fastclick.min.js"></script>
+<script src="${backendUrl}/statics/libs/app.js"></script>
+<script type="text/javascript">
+var vm = new Vue({
+	el:'#crmapp',
+	data:{
+		userName: '',
+		password: '',
+		captcha: '',
+		error: false,
+		errorMsg: '',
+		src: 'captcha.jpg',
+		newPassword:'',
+		trueNewPassword:'',
+		originalPassword:'',
+		name:''
+	},
+	beforeCreate: function(){
+		if(self != top){
+			top.location.href = self.location.href;
+		}
+	},
+	methods: {
+		refreshCode: function(){
+			this.src = "captcha.jpg?t=" + $.now();
+		},
+		login: function (event) {
+			var data = "userName="+vm.userName.trim()+"&password="+vm.password+"&captcha="+vm.captcha;
+			$.ajax({
+				type: "POST",
+			    url: "login",
+			    data: data,
+			    dataType: "json",
+			    success: function(data){
+					if(data.success){//登录成功
+						parent.location.href ='index.html';
+					}else{
+						vm.error = true;
+						vm.errorMsg = data.message;
+						vm.refreshCode();
+					}
+				}
+			});
+		},
+		updatePwd: function(){
+			layer.open({
+				type: 1,
+				skin: 'layui-layer-molv',
+				title: "修改密码",
+				area: ['550px', '310px'],
+				shadeClose: false,
+				content: jQuery("#passwordLayer"),
+				btn: ['修改','取消'],
+				btn1: function (index) {
+					if(vm.newPassword != vm.trueNewPassword ){
+						layer.alert("两次输入密码不一致");
+	            		return ;
+					}
+	            	var pwd =/^(?!(?:[^a-zA-Z]+|\D+|[a-zA-Z0-9]+)$).{8,}$/;
+	            	if(!pwd.test(vm.newPassword)){
+	            		layer.alert("密码必须包含数字、英文字母和特殊符号8位及以上");
+	            		return ;
+	            	}
+					var data ="name="+vm.name+ "&originalPassword="+vm.originalPassword+"&newPassword="+vm.newPassword+"&trueNewPassword="+vm.trueNewPassword;
+					$.ajax({
+						type: "POST",
+					    url: "updatePassword",
+					    data: data,
+					    dataType: "json",
+					    success: function(data){
+							if(data.success){
+								layer.close(index);
+								layer.alert('修改成功', function(index){
+									window.location.href='/login';
+								});
+							}else{
+								layer.alert(data.message);
+							}
+						}
+					});
+	            }
+			});
+		}
+	}
+});
+</script>
+</body>
+</html>

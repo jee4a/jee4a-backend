@@ -1,0 +1,52 @@
+
+*{list-style: none;padding: 0;margin: 0;font-family: 宋体;}
+body{font-size: 12px;}
+.strokeorder_wrap{width: 60%;background: #e3e3e3;margin: 50px auto;border-radius: 10px;padding-bottom: 50px;}
+.strokeorder{width: 90%;border-collapse:collapse;}
+.picture{overflow: hidden;padding-left:20px; }
+.picture_two{border-bottom: 1px solid #000;padding-bottom: 15px;}
+.picture li{float: left;width: 80px;height: auto;}
+.top h2{font-size: 25px;line-height: 50px;height: 50px;padding-left:20px; background: #60BBFF;border-radius: 10px 10px 0 0;}
+.greyy{color: #666;position: absolute;}
+
+
+.foot{border-collapse:collapse; font-size:14px;width: 90%;margin: 0 auto;}
+.foot img{width: 30px;height: 30px;margin-left:5px; }
+.foot tr,th,td{ height:25px;}
+.foot tr{ text-align:center; line-height:25px;}
+.foot th{ color:#fff; border:1px solid #333;}
+.foot td{ border:1px solid #333;}
+.foot .first{height: 50px;}
+.foot .first td{border:0 none;height: 30px;line-height: 30px;}
+.cp{cursor: pointer;}
+
+
+select,
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+input[type="radio"],
+input[type="checkbox"] { cursor: pointer;}
+
+.tabs-tool { border-top:0;}
+.wu-text,
+.wu-textarea { padding:3px; border:1px #95b8e7 solid; width:260px;}
+.wu-text { height:14px; line-height:14px; }
+
+.wu-header { height:55px; position:relative; z-index:0; overflow:hidden; border-bottom:1px #95b8e7 solid; background:#4d758f;}
+.wu-header-left { position:absolute; z-index:1; left:15px; top:0;}
+.wu-header-left h1 { font:20px/20px Verdana; color:#000;line-height: 50px;}
+.wu-header-right { position:absolute; z-index:1; right:5px; top:0; color:#000; text-align:right;}
+.wu-header-right p { line-height:1.7em;}
+.wu-header-right a { color:#000; margin:0 5px;}
+
+.wu-sidebar { width:160px;}
+.wu-side-tree .tree-node { padding:3px 0px; }
+.wu-side-tree a { display:block;}
+.wu-side-tree .tree-node-selected { padding:2px 0; border:1px #fade23 solid;}
+
+.wu-toolbar-button,
+.wu-toolbar-search { padding:3px 5px;}
+
+.wu-footer { height:20px; padding:5px; text-align:center; overflow:hidden; background:#e0ecff;}

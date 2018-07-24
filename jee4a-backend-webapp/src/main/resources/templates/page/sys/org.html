@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>部门管理</title>
+<#include "/header.html">
+<link rel="stylesheet" href="${backendUrl}/statics/css/bootstrap-table.min.css">
+<link rel="stylesheet" href="${backendUrl}/statics/plugins/treegrid/jquery.treegrid.css">
+<script src="${backendUrl}/statics/libs/bootstrap-table.min.js"></script>
+<script src="${backendUrl}/statics/plugins/treegrid/jquery.treegrid.min.js"></script>
+<script src="${backendUrl}/statics/plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
+<script src="${backendUrl}/statics/plugins/treegrid/jquery.treegrid.extension.js"></script>
+<script src="${backendUrl}/statics/plugins/treegrid/tree.table.js"></script>
+</head>
+<body>
+<div id="crmapp" v-cloak>
+	<div v-show="showList">
+		<div class="grid-btn">
+		    <div class="form-group col-sm-2">
+				<input type="text" class="form-control" v-model="q.name" @keyup.enter="reload" placeholder="请输入部门名称/部门ID">
+			</div>
+			<a class="btn btn-default" @click="reload">查询</a>
+			<#if shiro.hasPermission("sys:org:add")>
+			<a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sys:org:update")>
+			<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<!-- <#if shiro.hasPermission("sys:org:delete")>
+			<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if> -->
+		</div>
+		<table id="orgTable" data-mobile-responsive="true" data-click-to-select="true">
+			<thead>
+			<tr>
+				<th data-field="selectItem" data-checkbox="true"></th>
+			</tr>
+			</thead>
+		</table>
+	</div>
+
+	<div v-show="upShowList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div class="form-group" id="colseId">
+				<div class="col-sm-2 control-label">部门ID</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="org.id" readonly="readonly"  placeholder="部门ID"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">部门名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="org.name" placeholder="部门名称"/>
+				</div>
+			</div>	
+			<div class="form-group">
+				<div class="col-sm-2 control-label">上级部门</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" style="cursor:pointer;" v-model="org.parentName" @click="orgTree" readonly="readonly" placeholder="一级部门"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+	
+	<div v-show="chanShowList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+		   <div class="form-group">
+				<div class="col-sm-2 control-label">部门ID</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="org.id" readonly="readonly" placeholder="部门ID"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">部门名称</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" v-model="org.name" readonly="readonly" placeholder="部门名称"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">上级部门</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" style="cursor:pointer;" v-model="q.parentName"  readonly="readonly" placeholder="一级部门"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label">调整上级部门为</div>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" style="cursor:pointer;" v-model="org.parentName" @click="orgTree" readonly="readonly"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-2 control-label"></div>
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+	
+</div>
+
+<!-- 选择部门 -->
+<div id="orgLayer" style="display: none;padding:10px;">
+	<ul id="orgTree" class="ztree"></ul>
+</div>
+
+<script src="${backendUrl}/statics/js/sys/org.js?_${.now?long}"></script>
+</body>
+</html>

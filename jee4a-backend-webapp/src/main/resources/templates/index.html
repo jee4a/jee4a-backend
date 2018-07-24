@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>HeXinDai CRM</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="${backendUrl}/statics/css/bootstrap.min.css">
+  <link rel="stylesheet" href="${backendUrl}/statics/css/font-awesome.min.css">
+  <link rel="stylesheet" href="${backendUrl}/statics/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="${backendUrl}/statics/css/all-skins.min.css">
+  <link rel="stylesheet" href="${backendUrl}/statics/css/main.css">
+  
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper" id="crmapp" v-cloak >
+ <#if shiro.hasPermission("sys:outcall:view")>
+  <header class="main-header" style="padding-top: 40px;">
+  <#else> 
+  <header class="main-header" style="padding-top: 40px;">
+  </#if>
+  
+    <a href="javascript:void(0);" class="logo">
+      <span class="logo-mini"><b>BackEnd</b></span>
+      <span class="logo-lg"><b>Jee4a BackEnd</b></span>
+    </a>
+    <nav class="navbar navbar-static-top" role="navigation">
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+	  <div style="float:left;color:#fff;padding:15px 10px;">欢迎 {{user.userName}}</div>
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+		  <li><a href="javascript:;" @click="updatePassword"><i class="fa fa-lock"></i> &nbsp;修改密码</a></li>
+          <li><a href="logout"><i class="fa fa-sign-out"></i> &nbsp;退出系统</a></li>
+		</ul>
+      </div>
+    </nav>
+  </header>
+  
+  <#if shiro.hasPermission("sys:outcall:view")>
+       <div id="outcall" >
+       
+	  </div>
+	  
+  </#if>
+  	<aside class="main-sidebar" style="padding-top: 90px;">
+  
+ 
+    <section class="sidebar">
+      <ul class="sidebar-menu">
+        <li class="header">导航菜单</li>
+        
+		<menu-item :item="item" v-for="item in menuList"></menu-item>
+      </ul>
+    </section>
+  </aside>
+  <div class="content-wrapper">
+    <section class="content-header">
+      <ol class="breadcrumb" id="nav_title" style="position:static;float:none;">
+        <li class="active"><i class="fa fa-home" style="font-size:20px;position:relative;top:2px;left:-3px;"></i> &nbsp; 首页</li>
+        <li class="active" v-if="navTitleInfo !=''">{{navTitleInfo}}</li>
+        <li class="active">{{navTitle}}</li>
+      </ol>
+    </section>
+
+    <section class="content" style="background:#fff;">
+      <iframe scrolling="yes" frameborder="0" style="width:100%;min-height:200px;overflow:visible;background:#fff;" :src="main"></iframe>
+    </section>
+  </div>
+
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      Version 1.0.0
+    </div>
+    Copyright &copy; 2018 <a href="${backendUrl}" target="_blank">jee4a.com</a> All Rights Reserved
+  </footer>
+
+  <div class="control-sidebar-bg"></div>
+  
+	<div id="passwordLayer" style="display: none;">
+	<form class="form-horizontal">
+		<div class="form-group">
+		   	<div class="col-sm-2 control-label">账号</div>
+		    <span class="label label-success" style="vertical-align: bottom;">{{user.userName}}</span>
+		    <input id="userId" name="userId" type="hidden" value="{{user.id}}">
+		</div>
+		<div class="form-group">
+		   	<div class="col-sm-2 control-label">原密码</div>
+		   	<div class="col-sm-10">
+		      <input type="password" class="form-control" v-model="password" placeholder="原密码"/>
+		    </div>
+		</div>
+		<div class="form-group">
+		   	<div class="col-sm-2 control-label">新密码</div>
+		   	<div class="col-sm-10">
+		      <input type="text" class="form-control" v-model="newPassword" placeholder="新密码"/>
+		    </div>
+		</div>
+		<div class="form-group">
+		   	<div class="col-sm-2 control-label">确认新密码</div>
+		   	<div class="col-sm-10">
+		      <input type="text" class="form-control" v-model="trueNewPassword" placeholder="新密码"/>
+		    </div>
+		</div>
+	</form>
+</div>
+
+</div>
+<script src="${backendUrl}/statics/libs/jquery.min.js"></script>
+<script src="${backendUrl}/statics/libs/vue.min.js"></script>
+<script src="${backendUrl}/statics/libs/router.js"></script>
+<script src="${backendUrl}/statics/libs/bootstrap.min.js"></script>
+<script src="${backendUrl}/statics/libs/app.js"></script>
+<script src="${backendUrl}/statics/plugins/layer/layer.js"></script>
+<script src="${backendUrl}/statics/js/index.js?_${.now?long}"></script>
+<script type="text/javascript">
+var userName = "";
+var flag = false;
+ $(document).ready(function () {
+	 $.ajax({
+	        type: "get",
+	        url: "/sys/user/getUserPerms",
+	        dataType: "json",
+	        data: {"userPerms":"sys:outcall:view"},
+	        success: function(data){
+	            if(data.success){
+	            	var r = data.result.userPerms;
+	            	if(r){
+	            		 $.getJSON("sys/user/info?_"+$.now(), function(data){
+	            				if(data.success){
+	            					userName = data.result.userName;
+	            					if(userName != 'admin'){
+         					    		$('#outcall').load("${backendUrl}/page/infobird/ICWebUI.html");
+	         					    }else{
+	         					    	$(".main-header").attr("style","padding-top: 0px;");
+	         					    }
+	            				}
+	            			});
+	            	}else{
+	            		$(".main-header").attr("style","padding-top: 0px;");
+	            	}
+	            }else{
+	                alert(data.message);
+	            }
+	        }
+	 });
+});
+</script >
+</body>
+</html>
