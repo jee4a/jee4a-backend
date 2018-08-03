@@ -1,4 +1,4 @@
-package com.jee4a.backend.common.util;
+package com.jee4a.backend.common.utils;
 
 import java.util.*;
 import java.util.regex.Matcher;

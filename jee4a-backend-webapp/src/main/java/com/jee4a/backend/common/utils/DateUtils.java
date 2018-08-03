@@ -1,4 +1,4 @@
-package com.jee4a.backend.common.util;
+package com.jee4a.backend.common.utils;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;

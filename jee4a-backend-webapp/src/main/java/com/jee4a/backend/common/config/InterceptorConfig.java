@@ -64,6 +64,8 @@ public class InterceptorConfig extends WebMvcConfigurerAdapter {
 		.excludePathPatterns("/sys/resource/nav.html")
 		.excludePathPatterns("/statics/**") 
 		.excludePathPatterns("/favicon.ico")
+		.excludePathPatterns("/error")
+		.excludePathPatterns("/user/info/**")
 		.excludePathPatterns("/captcha.jpg");
 		super.addInterceptors(registry);
 		
@@ -82,6 +84,8 @@ public class InterceptorConfig extends WebMvcConfigurerAdapter {
 		.excludePathPatterns("/index.html")
 		.excludePathPatterns("/statics/**") 
 		.excludePathPatterns("/favicon.ico")
+		.excludePathPatterns("/user/info/**")
+		.excludePathPatterns("/error")
 		.excludePathPatterns("/captcha.jpg");
 		super.addInterceptors(registry);
 	}

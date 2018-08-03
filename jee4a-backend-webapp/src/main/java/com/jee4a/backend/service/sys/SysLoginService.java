@@ -23,7 +23,7 @@ import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
 import com.jee4a.backend.common.config.ConfigValues;
 import com.jee4a.backend.common.shiro.ShiroUtils;
-import com.jee4a.backend.common.util.DateUtils;
+import com.jee4a.backend.common.utils.DateUtils;
 import com.jee4a.backend.hub.mapper.sys.SysUserLoginLogMapper;
 import com.jee4a.backend.hub.mapper.sys.SysUserMapper;
 import com.jee4a.backend.hub.model.CacheKeys;
