@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -253,7 +252,7 @@ public class SysUserService extends BaseService {
 			map.put("mobile", userVo.getMobile());
 			
 			List<SysUser> list=sysUserMapper.findByMap(map);
-			if(!user.getMobile().equals(userVo.getMobile()) && CollectionUtils.isNotEmpty(list)){
+			if(!user.getMobile().equals(userVo.getMobile()) && !list.isEmpty()){
 				result.setError(-20004, "手机号已被占用");
 				return result;
 			}
@@ -291,7 +290,7 @@ public class SysUserService extends BaseService {
 		Result result = new Result();
 		List<String> userIdList = JsonUtils.json2List(userIdStr);
 		try {
-			if(org.apache.commons.collections.CollectionUtils.isEmpty(userIdList)) {
+			if(userIdList.isEmpty()) {
 				throw new BusinessException(-2009, "用户id为空，删除失败");
 			}
 			sysUserManager.deleteUser(userIdList,updateId);

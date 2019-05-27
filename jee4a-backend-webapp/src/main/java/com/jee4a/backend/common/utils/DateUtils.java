@@ -7,7 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.expression.ParseException;
 
 import com.jee4a.common.lang.StringUtils;
@@ -39,7 +40,8 @@ public class DateUtils  extends org.apache.commons.lang.time.DateUtils{
 	*/
 	public final static int COMP_MODEL_DATETIME = 3;
 
-	private static Logger logger = Logger.getLogger(DateUtils.class);
+	public static Logger logger = LoggerFactory.getLogger(DateUtils.class);
+	
 
 	/**
 	* 要用到的DATE Format的定义
@@ -69,7 +71,7 @@ public class DateUtils  extends org.apache.commons.lang.time.DateUtils{
 		try {
 			 date =  parseDate(str, new String[] { parsePatterns });
 		} catch (java.text.ParseException e) {
-			logger.error(e);
+			logger.error(e.getMessage());
 		}
 		return date;
 	}
@@ -511,7 +513,7 @@ public class DateUtils  extends org.apache.commons.lang.time.DateUtils{
 	try {
 	sRet = formatter.format(dt).toString();
 	} catch (Exception e) {
-	logger.error(e);
+	logger.error(e.getMessage());
 	sRet = null;
 	}
 
@@ -967,7 +969,7 @@ public class DateUtils  extends org.apache.commons.lang.time.DateUtils{
 	try {
 	date = sdf.parse(dateString);
 	} catch (Exception e) {
-	logger.error(e);
+		logger.error(e.getMessage());
 	}
 	return date;
 	}
@@ -995,7 +997,7 @@ public class DateUtils  extends org.apache.commons.lang.time.DateUtils{
 	try {
 	date1 = sdf.parse(dateStr);
 	} catch (Exception e) {
-	logger.error(e);
+		logger.error(e.getMessage());
 	}
 	return date1;
 	}
@@ -1064,7 +1066,7 @@ public class DateUtils  extends org.apache.commons.lang.time.DateUtils{
 	startDate = DateUtils.parseDate(startDateStr, DateUtils.DATE_FORMAT_DATEONLY);
 	endDate = DateUtils.parseDate(endDateStr, DateUtils.DATE_FORMAT_DATEONLY);
 	} catch (ParseException e) {
-	logger.error(e);
+		logger.error(e.getMessage());
 	return false;
 	}
 	return isOverIntervalLimit(startDate, endDate, interval);
@@ -1209,7 +1211,7 @@ public class DateUtils  extends org.apache.commons.lang.time.DateUtils{
 	try {
 	return formatter.parse(dateStr);
 	} catch (Exception e) {
-	logger.error(e);
+		logger.error(e.getMessage());
 	return null;
 	}
 	}

@@ -69,7 +69,7 @@ public class SysDictService extends BaseService{
 		Result result = new Result();
 		try {
 			List<String> dictId = JsonUtils.json2List(ids);
-			if(org.apache.commons.collections.CollectionUtils.isEmpty(dictId)) {
+			if(dictId.isEmpty()) {
 				throw new BusinessException(-2009, "用户id为空，删除失败");
 			}
 			for (String id : dictId) {

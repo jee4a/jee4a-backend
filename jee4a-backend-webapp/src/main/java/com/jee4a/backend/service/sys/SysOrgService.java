@@ -248,7 +248,7 @@ public class SysOrgService extends BaseService{
 			SysOrg sysOrg = new SysOrg();
 			sysOrg.setParentId(orgId);
 			List<SysOrg> orgList = sysOrgMapper.queryList(sysOrg);
-			if(org.apache.commons.collections.CollectionUtils.isNotEmpty(orgList)) {
+			if(!orgList.isEmpty()) {
 				result.setMessage("请删除子部门");
 				return result;
 			}

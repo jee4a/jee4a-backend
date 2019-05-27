@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +54,7 @@ public class SysUserManager extends BaseManager{
 		sysUserMapper.insert(user);
 		
 		userVo.setRoleIdList(Arrays.asList(userVo.getRoleId()));
-		if(CollectionUtils.isNotEmpty(userVo.getRoleIdList())) {
+		if(!userVo.getRoleIdList().isEmpty()) {
 			this.inserUserAndRole(userVo.getRoleIdList(), user.getId());
 		}
 	}
@@ -108,7 +107,7 @@ public class SysUserManager extends BaseManager{
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, value = BaseConstant.DB_CRM)
 	public void inserUserAndRole(List<Integer> roleList,Integer userId) {
-		if(CollectionUtils.isEmpty(roleList)) {
+		if(!roleList.isEmpty()) {
 			throw new BusinessException(-3001, "修改失败，角色列表为空");
 		}
 		for (Integer roleId : roleList) {
